@@ -13,7 +13,7 @@ pipeline {
         stage('test') {
       steps {
         echo 'testing'
-    // sh "${mvnHome}/bin/mvn -B test -f example/pom.xml"
+    // sh "${mvnHome}/bin/mvn -B test"
     // sh "${mvnHome}/bin/mvn -version"
     // sh "${dockerHome}/bin/docker -v"
       }
@@ -21,7 +21,7 @@ pipeline {
        stage('SonarQube analysis') {
      steps{
      withSonarQubeEnv('sonarqube') {
-                   sh "${mvnHome}/bin/mvn -f example/pom.xml  -DskipTests sonar:sonar "
+                   sh "${mvnHome}/bin/mvn -DskipTests"
                     }
     }
   }
