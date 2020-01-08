@@ -53,6 +53,7 @@ public KafkaTemplate<String, Object> kafkaTemplate() {
     return new KafkaTemplate<>(producerFactory());
 }
 
+// waiting for this to work
 //if topic already exists this bean is ignored
 //@Bean
 //public NewTopic greetingTopic() {
