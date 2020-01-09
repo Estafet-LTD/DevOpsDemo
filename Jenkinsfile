@@ -86,7 +86,7 @@ stage('Create deployment config') {
       when {
         expression {
           openshift.withCluster() {
-            return !openshift.selector('dc', 'example').exists()
+            return !openshift.selector('dc', 'example-dev').exists()
           }
         }
       }
