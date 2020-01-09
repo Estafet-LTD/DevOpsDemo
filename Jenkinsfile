@@ -45,8 +45,10 @@ pipeline {
  when {
         expression {
           openshift.withCluster() {
+          openshift.withProject('example-project') {
             return !openshift.selector("bc", "example").exists();
           }
+        }
         }
       }
        steps {
