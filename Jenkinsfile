@@ -41,17 +41,24 @@ pipeline {
 //      }
 //    }
 
- // stage('Create Image Builder') {
- //      steps {
- //       script {
- //         openshift.withCluster() {
- //         openshift.withProject('example-project') {
- //          openshift.newBuild("--name=example", "--image-stream=redhat-openjdk18-openshift", "--binary")
- //        }
- //         }
- //       }
- //     }
- //   }
+ stage('Create Image Builder') {
+ when {
+        expression {
+          openshift.withCluster() {
+            return !openshift.selector("bc", "example").exists();
+          }
+        }
+      }
+       steps {
+        script {
+          openshift.withCluster() {
+          openshift.withProject('example-project') {
+           openshift.newBuild("--name=example", "--image-stream=wildfly", "--binary")
+         }
+          }
+        }
+      }
+   }
    
   stage('Build Image') {
    steps {
