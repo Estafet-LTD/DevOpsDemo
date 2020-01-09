@@ -48,17 +48,18 @@ pipeline {
         }
       }
     }
-    stage('Build Image') {
-      steps {
-        script {
-          openshift.withCluster() {
-           openshift.withProject('example-project') {
-            openshift.selector("bc", "example").startBuild("--from-file=target/example-0.0.1-SNAPSHOT.jar", "--wait")
-          }
-          }
-        }
-      }
-    }
+   
+   // stage('Build Image') {
+    //  steps {
+    //    script {
+   //       openshift.withCluster() {
+   //        openshift.withProject('example-project') {
+  //          openshift.selector("bc", "example").startBuild("--from-file=target/example-0.0.1-SNAPSHOT.jar", "--wait")
+   //       }
+  //        }
+  //      }
+   //   }
+   // }
 
         stage('Final Stage') {
             steps {
