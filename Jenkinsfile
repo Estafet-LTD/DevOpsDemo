@@ -73,15 +73,15 @@ pipeline {
        }
     }
   }
-  stage('Tag image as DEV') {
-      steps {
-        script {
-          openshift.withCluster() {
-            openshift.tag("example:latest", "example:dev")
-          }
-        }
-      }
-    }
+//  stage('Tag image as DEV') {
+//      steps {
+//        script {
+//          openshift.withCluster() {
+//            openshift.tag("example:latest", "example:dev")
+//          }
+//        }
+//      }
+//    }
 stage('Create deployment config') {
       when {
         expression {
