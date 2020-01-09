@@ -24,18 +24,18 @@ pipeline {
                     }
     }
   }
-  stage('Build App') {
-      steps {
-        sh "${mvnHome}/bin/mvn -DskipTests clean install"
-      }
-    }
+//  stage('Build App') {
+//      steps {
+//       sh "${mvnHome}/bin/mvn -DskipTests clean install"
+//      }
+//   }
     
    stage('Build Image') {
      steps {
         script {
           openshift.withCluster() {
            openshift.withProject('example-project') {
-           openshift.newApp('target/example-0.0.1-SNAPSHOT.jar')
+           openshift.newApp('wildfly~http://192.168.118.130:3000/root/example')
           }
          }
         }
