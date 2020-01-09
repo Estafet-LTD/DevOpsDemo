@@ -30,16 +30,7 @@ pipeline {
       }
     }
   stage('Create Image Builder') {
-      when {
-        expression {
-          openshift.withCluster() {
-          openshift.withProject('example-project') {
-           return !openshift.selector("bc", "example").exists();
-          }
-          }
-        }
-      }
-      steps {
+       steps {
         script {
           openshift.withCluster() {
           openshift.withProject('example-project') {
