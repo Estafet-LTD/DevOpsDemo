@@ -41,7 +41,7 @@ pipeline {
 //      }
 //    }
 
- stage('Create Image Builder') {
+ stage('Create Builder') {
  when {
         expression {
           openshift.withCluster() {
@@ -73,7 +73,31 @@ pipeline {
        }
     }
   }
-
+  stage('Tag image as DEV') {
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.tag("example:latest", "example:dev")
+          }
+        }
+      }
+    }
+stage('Create deployment config') {
+      when {
+        expression {
+          openshift.withCluster() {
+            return !openshift.selector('dc', 'example').exists()
+          }
+        }
+      }
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.newApp("example:latest", "--name=example-dev").narrow('svc').expose()
+          }
+        }
+      }
+    }
         stage('Final Stage') {
             steps {
                 echo 'Goodbye, world!' 
