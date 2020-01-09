@@ -13,9 +13,9 @@ pipeline {
         stage('test') {
       steps {
         echo 'testing'
-    // sh "${mvnHome}/bin/mvn -B test"
-    // sh "${mvnHome}/bin/mvn -version"
-    // sh "${dockerHome}/bin/docker -v"
+    steps {
+        sh "${mvnHome}/bin/mvn -B test"
+      }
       }
   }
        stage('SonarQube analysis') {
@@ -27,14 +27,16 @@ pipeline {
   }
   stage('Build App') {
       steps {
-        sh "${mvnHome}/bin/mvn install"
+        sh "${mvnHome}/bin/mvn -DskipTests clean install"
       }
     }
   stage('Create Image Builder') {
       when {
         expression {
           openshift.withCluster() {
+           openshift.withProject('example-project') {
             return !openshift.selector("bc", "example").exists();
+          }
           }
         }
       }
@@ -52,7 +54,9 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
+           openshift.withProject('example-project') {
             openshift.selector("bc", "example").startBuild("--from-file=target/example-0.0.1-SNAPSHOT.jar", "--wait")
+          }
           }
         }
       }
