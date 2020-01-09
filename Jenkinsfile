@@ -86,14 +86,18 @@ stage('Create deployment config') {
       when {
         expression {
           openshift.withCluster() {
+          openshift.withProject('example-project') {
             return !openshift.selector('dc', 'example-dev').exists()
           }
+        }
         }
       }
       steps {
         script {
           openshift.withCluster() {
+          openshift.withProject('example-project') {
             openshift.newApp("example:latest", "--name=example-dev").narrow('svc').expose()
+          }
           }
         }
       }
