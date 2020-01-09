@@ -29,29 +29,41 @@ pipeline {
         sh "${mvnHome}/bin/mvn -DskipTests clean install"
       }
     }
-  stage('Create Image Builder') {
-       steps {
+    
+   stage('Build Image') {
+     steps {
         script {
           openshift.withCluster() {
-          openshift.withProject('example-project') {
-           openshift.newBuild("--name=example", "--image-stream=redhat-openjdk18-openshift", "--binary")
-         }
+           openshift.withProject('example-project') {
+           openshift.newApp('target/example-0.0.1-SNAPSHOT.jar')
           }
+         }
         }
       }
     }
+ // stage('Create Image Builder') {
+ //      steps {
+ //       script {
+ //         openshift.withCluster() {
+ //         openshift.withProject('example-project') {
+ //          openshift.newBuild("--name=example", "--image-stream=redhat-openjdk18-openshift", "--binary")
+ //        }
+ //         }
+ //       }
+ //     }
+ //   }
    
-   // stage('Build Image') {
-    //  steps {
-    //    script {
-   //       openshift.withCluster() {
-   //        openshift.withProject('example-project') {
-  //          openshift.selector("bc", "example").startBuild("--from-file=target/example-0.0.1-SNAPSHOT.jar", "--wait")
-   //       }
-  //        }
-  //      }
-   //   }
-   // }
+ // stage('Build Image') {
+ //  steps {
+ //    script {
+ //       openshift.withCluster() {
+ //        openshift.withProject('example-project') {
+ //          openshift.selector("bc", "example").startBuild("--from-file=target/example-0.0.1-SNAPSHOT.jar", "--wait")
+ //       }
+ //        }
+ //      }
+ //   }
+ // }
 
         stage('Final Stage') {
             steps {
