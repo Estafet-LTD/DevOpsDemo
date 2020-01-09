@@ -30,17 +30,6 @@ pipeline {
       }
    }
     
-//     steps {
-//        script {
-//          openshift.withCluster() {
-//           openshift.withProject('example-project') {
-//           openshift.newApp('wildfly~http://192.168.118.130:3000/root/example')
-//          }
-//         }
-//        }
-//      }
-//    }
-
  stage('Create Builder') {
  when {
         expression {
@@ -73,6 +62,7 @@ pipeline {
        }
     }
   }
+  
 //  stage('Tag image as DEV') {
 //      steps {
 //        script {
@@ -82,6 +72,7 @@ pipeline {
 //        }
 //      }
 //    }
+
 stage('Create deployment config') {
       when {
         expression {
