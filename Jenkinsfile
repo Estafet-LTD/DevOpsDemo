@@ -13,11 +13,10 @@ pipeline {
         stage('test') {
       steps {
         echo 'testing'
-    steps {
         sh "${mvnHome}/bin/mvn -B test"
       }
       }
-  }
+  
        stage('SonarQube analysis') {
      steps{
      withSonarQubeEnv('sonarqube') {
@@ -34,7 +33,9 @@ pipeline {
       when {
         expression {
           openshift.withCluster() {
+          openshift.withProject('example-project') {
            return !openshift.selector("bc", "example").exists();
+          }
           }
         }
       }
