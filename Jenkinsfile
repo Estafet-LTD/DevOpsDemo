@@ -24,23 +24,23 @@ pipeline {
                     }
     }
   }
-//  stage('Build App') {
-//      steps {
-//       sh "${mvnHome}/bin/mvn -DskipTests clean install"
-//      }
-//   }
-    
-   stage('Build Image') {
+  stage('Build App') {
      steps {
-        script {
-          openshift.withCluster() {
-           openshift.withProject('example-project') {
-           openshift.newApp('wildfly~http://192.168.118.130:3000/root/example')
-          }
-         }
-        }
+      sh "${mvnHome}/bin/mvn -DskipTests clean install"
       }
-    }
+   }
+    
+//     steps {
+//        script {
+//          openshift.withCluster() {
+//           openshift.withProject('example-project') {
+//           openshift.newApp('wildfly~http://192.168.118.130:3000/root/example')
+//          }
+//         }
+//        }
+//      }
+//    }
+
  // stage('Create Image Builder') {
  //      steps {
  //       script {
@@ -53,17 +53,17 @@ pipeline {
  //     }
  //   }
    
- // stage('Build Image') {
- //  steps {
- //    script {
- //       openshift.withCluster() {
- //        openshift.withProject('example-project') {
- //          openshift.selector("bc", "example").startBuild("--from-file=target/example-0.0.1-SNAPSHOT.jar", "--wait")
- //       }
- //        }
- //      }
- //   }
- // }
+  stage('Build Image') {
+   steps {
+     script {
+        openshift.withCluster() {
+        openshift.withProject('example-project') {
+           openshift.selector("bc", "example").startBuild("--from-file=target/example-0.0.1-SNAPSHOT.jar", "--wait")
+        }
+         }
+       }
+    }
+  }
 
         stage('Final Stage') {
             steps {
