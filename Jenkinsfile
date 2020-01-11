@@ -44,7 +44,7 @@ pipeline {
         script {
           openshift.withCluster() {
           openshift.withProject('example-project') {
-           openshift.newBuild("--name=example", "--image-stream=wildfly", "--binary")
+           openshift.newBuild("--name=example", "--image-stream=springboot-java", "--binary")
          }
           }
         }
