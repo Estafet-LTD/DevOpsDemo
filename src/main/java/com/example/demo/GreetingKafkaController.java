@@ -34,19 +34,14 @@ public class GreetingKafkaController {
         
     }
  
- //   @GetMapping("/greeting")
-  //  public String getGreetings() throws Exception {
-       //latch = new CountDownLatch(messagesPerRequest);
-       // IntStream.range(0, messagesPerRequest)
-       //         .forEach(i -> this.template.send(topicName, String.valueOf(i),
-       //                 new Greeting(i, "Greeting"))
-       //         );
-       // latch.await(60, TimeUnit.SECONDS);
-       // logger.info("All messages received");
-    //    return "Hello from Kafka!";
-  //  }
+    @GetMapping("/greetings")
+    public String getGreetings() throws Exception {
+    	// how to retrieve the messages?
+       logger.info("All messages received");
+       return "Hello from Kafka!";
+    }
     
-    @PostMapping("/greeting")
+    @PostMapping("/greetings")
     public String postGreetings(@RequestParam(value="name", defaultValue="World") String name) throws Exception {
     	Greeting greeting = new Greeting(counter.incrementAndGet(),
                 String.format(messageTemplate, name));
