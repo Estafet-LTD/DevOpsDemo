@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +19,6 @@ public class GreetingKafkaController {
  
     private final KafkaTemplate<String, Object> template;
     private final String topicName;
-    private final int messagesPerRequest;
     private final AtomicLong counter = new AtomicLong();
     private static String messageTemplate = "Hello, %s!";
  
@@ -30,23 +28,21 @@ public class GreetingKafkaController {
             @Value("${tpd.messages-per-request}") final int messagesPerRequest) {
         this.template = template;
         this.topicName = topicName;
-        this.messagesPerRequest = messagesPerRequest;
         
     }
  
     @GetMapping("/greetings")
-    public String getGreetings() throws Exception {
+    public String getGreetings() {
     	// how to retrieve the messages?
        logger.info("All messages received");
        return "Hello from Kafka!";
     }
     
     @PostMapping("/greetings")
-    public String postGreetings(@RequestParam(value="name", defaultValue="World") String name) throws Exception {
+    public String postGreetings(@RequestParam(value="name", defaultValue="World") String name) {
     	Greeting greeting = new Greeting(counter.incrementAndGet(),
                 String.format(messageTemplate, name));
          this.template.send(topicName, greeting);
-       // latch.await(60, TimeUnit.SECONDS);
         logger.info("Message sent: " + greeting);
         return "Message sent: " + greeting;
     }
