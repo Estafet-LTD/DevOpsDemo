@@ -34,7 +34,7 @@ public class GreetingKafkaController {
     @GetMapping("/greetings")
     public String getGreetings() {
     	// how to retrieve the messages?
-       logger.info("All messages received");
+       logger.info("Messages received");
        return "Hello from Kafka!";
     }
     
