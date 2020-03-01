@@ -1,16 +1,26 @@
 pipeline {
-    agent any 
-    stages {
-        stage('Stage 1') {
+    agent {
+   any {}
+    }
+    environment {
+    // Get the maven tool
+        // ** NOTE: This 'M3' maven tool must be configured in the global configuration
+        def mvnHome = tool 'M3'
+        //def dockerHome = tool 'Docker'
+   }
+   stages {
+   stage('First Stage') {
             steps {
-                echo 'Hello world!' 
+                echo 'Hello, world!' 
             }
         }
-      stage('test') {
+    
+    
+        stage('test') {
       steps {
         echo 'testing'
-        sh "$WORKSPACE/mvnw -B test"
+        sh "${mvnHome}/bin/mvn -B test"
       }
-      }  
-    }
-}
+      }
+      }
+      }
