@@ -20,7 +20,7 @@ public class GreetingKafkaController {
     private final KafkaTemplate<String, Object> template;
     private final String topicName;
     private final AtomicLong counter = new AtomicLong();
-    private static String messageTemplate = "Hiya, %s!";
+    private static String messageTemplate = "Hello, %s!";
  
     public GreetingKafkaController(
             final KafkaTemplate<String, Object> template,
