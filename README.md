@@ -55,6 +55,18 @@ Also inside the Deployment VM there are:
 
 - DevOps is often referred to as a culture rather than a particular set of tools
 
+--------------------------------
+
+## Jenkins Pipelines
+
+![diagram](graphics/DevOps Pipeline.jpg "Jenkins pipeline")
+
+- Jenkins is an open-source automation server written in Java
+- It is used for Continuous Integration 
+- Consists of a set of steps that run to build, test, and deploy code
+- The latest Jenkins build servers use Pipelines to automate the steps
+- Jenkins servers can run in containers under OpenShift
+- Jenkins can orchestrate th euse of other tools such as SonarQube and Clair - which can also run in OpenShift
 
 -------------------------------
 ## The Example Project
