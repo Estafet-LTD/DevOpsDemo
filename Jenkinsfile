@@ -6,19 +6,21 @@ pipeline {
     // Get the maven tool
         // ** NOTE: This 'M3' maven tool must be configured in the global configuration
         def mvnHome = tool 'M3'
+        def VERSION = readMavenPom().getVersion()
         //def dockerHome = tool 'Docker'
    }
    stages {
    stage('First Stage') {
             steps {
-                echo 'Hello, world!' 
-            }
-        }
-    
-    
-        stage('test') {
+                echo 'Beginning pipeline!'
+                echo "pom version is ${VERSION}"
+                echo "jenkins build is ${BUILD_NUMBER}"
+                }
+ }
+   
+        stage('Test') {
       steps {
-        echo 'testing'
+        echo 'Running tests'
         sh "${mvnHome}/bin/mvn -B test"
       }
       }
@@ -61,22 +63,12 @@ pipeline {
      script {
         openshift.withCluster() {
         openshift.withProject('devops-example') {
-           openshift.selector("bc", "example-build-jenk").startBuild("--from-file=target/example-0.0.1-SNAPSHOT.jar", "--wait")
+           openshift.selector("bc", "example-build-jenk").startBuild("--from-file=target/example-${VERSION}.jar", "--wait")
         }
          }
        }
     }
   }
-  
-//  stage('Tag image as DEV') {
-//      steps {
-//        script {
-//          openshift.withCluster() {
-//            openshift.tag("example:latest", "example:dev")
-//          }
-//        }
-//      }
-//    }
 
 stage('Create deployment config') {
       when {
@@ -98,6 +90,19 @@ stage('Create deployment config') {
         }
       }
     }
+    
+     stage('Tag image') {
+    steps {
+      script {
+        openshift.withCluster() {
+            openshift.withProject('devops-example') {
+          openshift.tag("example-build-jenk:latest", "example-build-jenk:${VERSION}-${BUILD_NUMBER}")
+        }
+      }
+      }
+    }
+   }
+    
     stage('Rollout') {
       steps {
         script {
