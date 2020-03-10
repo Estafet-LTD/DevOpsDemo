@@ -73,7 +73,7 @@ The main application is contained in the com.example.demo package under src/main
 
 ### The Jenkins build pipeline
 
-![diagram](graphics/jenkins in devops-example.png "Jenkins pipeline") 
+![diagram](graphics/jenkins-in-devops-example.png "Jenkins pipeline") 
 
 The order and steps of the build are defined in the  _Jenkinsfile_  at the top level of the project. This file represents a pipeline for Continuous Build and Deployment. The Jenkins server will interpret the steps in this file and manage the build accordingly. Refer to this file when reading the explanation below.
 
@@ -139,7 +139,7 @@ Following the installation of the Jenkins and Sonarqube servers in containers in
 * add engineer/Passw0rd! as credentials 
 
 
-![diagram](graphics/gitea server setup.jpg "Gitea server")
+![diagram](graphics/gitea-server-setup.jpg "Gitea server")
 
 #### setup Gitea organization
 
@@ -187,7 +187,7 @@ This assumes the Sonarqube server has already been installed in the OpenShift cl
 
 * server token:  _token copied from sonarqube_ 
 
-![diagram](graphics/sonar setup.jpg "Sonar server")
+![diagram](graphics/sonar-setup.jpg "Sonar server")
 
 
 
