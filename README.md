@@ -19,6 +19,28 @@ This project is hosted in git and is intended to demonstrate how DevOps practice
 - DevOps is often referred to as a culture rather than a particular set of tools
 
 --------------------------------
+## OpenShift
+
+![diagram](graphics/openshift-logo.png "OpenShift")
+
+OpenShift is a Platform-as-a-Service (PaaS) product build around Docker containers, orchestrated by Kubernetes.
+
+The OpenShift cluster in the SIAB stack is pre-installed using ansible based on a defined  _hosts_  file in the /etc/ansible folder. The cluster is an all-in-one deployment where master and node pods are contained on the same host.
+
+Post install several containers were added as follows to enable the example project which is defined in Gitea (see below)
+
+* Jenkins server container deployed in ci-cd project. This will build projects using pipelines.
+
+
+* Sonarqube server container deployed in sonarqube project with a postgres database container. This can be invoked to perform static code analysis
+
+
+* Kafka containers deployed in kafka project via the strimzi-cluster-operator. The kafka installation provides a single cluster for testing purposes with 2 replicas. There is also a zookeeper cluster also with 2 replicas.
+
+
+[See ADDING_FEATURES.md for instructions on how to add further containers to OCP](ADDING_FEATURES.md) 
+
+--------------------------------
 
 ## Jenkins Pipelines
 
@@ -52,10 +74,6 @@ This project is hosted in git and is intended to demonstrate how DevOps practice
 
 -------------------------------
 ## The Example Project
-
-![diagram](graphics/openshift-logo.png "OpenShift")
-
-
 
 This project is intended to represent an approach to CI/CD using a Jenkins build server hosted in an OpenShift container
 
