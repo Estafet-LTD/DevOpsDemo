@@ -1,6 +1,85 @@
 # Adding features to the SIAB OpenShift cluster
 
-See the files in /home/engineer/ocp/pods for examples of how the existing containers were installed
+See the files in /home/engineer/ocp/pods for examples of how the existing containers were installed. These can be used as exemplars of how to include new images and templates. Images represent the basis for creating containers while templates will simplify the creation of applications within a project from the Service Catalog
 
-Steps follow:
+The basic steps follow to add an image to the internal OpenShift docker registry and to create a Service Catalog item for use in projects. 
+
+The example will add a mongodb image with an ephemeral Service Catalog Item:
+
+## add docker image to the infrastructure VM
+
+The infrastructure VM is connected to the internet and is the only way to get components into the disconnected environment
+
+* Add the image to the infrastructure vm and tag it for the Thales registry
+
+```
+docker pull registry.redhat.io/rhscl/mongodb-34-rhel7
+docker tag registry.redhat.io/rhscl/mongodb-34-rhel7  repo.thales.com:5000/rhscl/mongodb-34-rhel7
+docker push repo.thales.com:5000/rhscl/mongodb-34-rhel7
+```
+
+## add the image to the internal OCP registry in the OCP VM in the openshift namespace
+
+See  _/home/engineer/ocp/pods/load-java-images.sh_  for an example file
+
+```
+oc login -u developer -p developer
+
+TOKEN=$(oc whoami -t)
+
+docker login -u developer -p $TOKEN docker-registry.default.svc.cluster.local:5000
+
+docker pull repo.thales.com:5000/rhscl/mongodb-34-rhel7
+
+
+docker tag repo.thales.com:5000/rhscl/mongodb-34-rhel7 docker-registry.default.svc.cluster.local:5000/openshift/mongodb-34-rhel7
+
+docker push docker-registry.default.svc.cluster.local:5000/openshift/mongodb-34-rhel7
+
+oc login -u system:admin
+
+```
+
+## add the template to the openshift project
+
+You must find and modify a suitable template file online or else create your own file. there are examples online e.g. at  _https://github.com/openshift/origin/tree/master/examples/db-templates_
+
+In this case we have chosen mongodb-ephemeral-template.json and placed it in  _/home/engineer/ocp/pods/_
+
+If you wish persistent there will be a need to create pv - see example in jenkins-deployment calling jenkins-pv.yaml
+
+* amend template as required to reflect th eimage stream tag you have created and the version. E.g. 
+
+
+```
+{
+                                "kind": "ImageStreamTag",
+                                "name": "mongodb-34-rhel7:${MONGODB_VERSION}",
+                                "namespace": "${NAMESPACE}"
+                                }
+```
+
+and
+
+```
+{
+            "description": "Version of MongoDB image to be used (3.6 or latest).",
+            "displayName": "Version of MongoDB Image",
+            "name": "MONGODB_VERSION",
+            "required": true,
+            "value": "latest"
+        }
+```
+
+* switch to the openshift project
+
+```
+oc project openshift
+```
+
+* apply the template
+
+```
+oc create -f /home/engineer/ocp/pods/mongodb-ephemeral-template.json
+```
 
