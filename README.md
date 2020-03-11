@@ -32,6 +32,24 @@ This project is hosted in git and is intended to demonstrate how DevOps practice
 - Jenkins servers can run in containers under OpenShift
 - Jenkins can orchestrate the use of other tools such as SonarQube and Clair - which can also run in OpenShift
 
+--------------------------------------
+## Default addresses and log-in details
+
+*  _OpenShift_  - [http://ocp.thales.com:8443](http://ocp.thales.com:8443)  - developer / developer
+
+
+*  _Gitea_  - [http://ocp.thales.com:3000](http://ocp.thales.com:3000)  - engineer / Passw0rd!
+
+
+*  _Nexus_  - [http://ocp.thales.com:8081](http://ocp.thales.com:8081)  - admin / password in /opt/nexus/sonatype-work/nexus3/admin.password file
+
+
+*  _Jenkins_  - [http://jenkins.ocp.thales.com](http://jenkins.ocp.thales.com)  - admin / password
+
+
+*  _Sonarqube_  - [http://sonar-sonarqube.apps.ocp.thales.com](http://sonar-sonarqube.apps.ocp.thales.com)  - admin / admin
+
+
 -------------------------------
 ## The Example Project
 
@@ -81,6 +99,9 @@ The Jenkins server within the OCP machine has been installed with the Gitea plug
 
 The steps in the pipeline are as follows:
 
+* [check out]  - the first step is not visible as Jenkins will pull the code from git when the build is triggered whether manually or via a webhook
+
+
 * environment  -  set up variables used in the pipeline
 
 
@@ -114,10 +135,21 @@ The steps in the pipeline are as follows:
 * Last stage - dummy stage
 
 
+#### Feedback from the plug-ins
+
+* The success or failure of the Jenkins build is automatically fed back to the gitea server by the Jenkins build process and is visible on the gitea console:
+
+![diagram](graphics/gitea-jenkins-notify.png "Gitea notify")
+
+
+* The sonarqube analysis that is triggered by the Jenkins build can be linked via the sonarqube icon in the build history:
+
+![diagram](graphics/sonar-jenkins-notify.png "Sonar notify")
+
 ---------------------------------------------
 ### Extra configuration of the Jenkins server in the OCP virtual machine
 
-Following the installation of the Jenkins and Sonarqube servers in containers in the OpenShift cluster further configuration is required as follows. This may have already been set up in the test environment. The following instructions are for completeness in this case
+Following the installation of the Jenkins and Sonarqube servers in containers in the OpenShift cluster further configuration is required as follows. This should have already been set up in the test environment. The following instructions are for completeness in this case
 
 #### setup Gitea server for plug-in
 
@@ -161,7 +193,9 @@ Following the installation of the Jenkins and Sonarqube servers in containers in
 Jenkins will scan the gitea repo and find engineer's projects 
 
 
-Jenkins will automatically look to see if the project has a Jenkinsfile and check it out and try to build it - also creates a webhook in gitea so that future pushes of code to the repository will trigger a new Jenkins build
+Jenkins will automatically look to see if the project has a Jenkinsfile and check it out and try to build it - also creates a webhook in gitea so that future pushes of code to the repository will trigger a new Jenkins build. This webhook is visible from the gitea console under Settings | Webhooks:
+
+![diagram](graphics/gitea-jenkins-webhook.png "Gitea enkins webhook")
 
 #### set up the Sonarqube  server in Jenkins
 
