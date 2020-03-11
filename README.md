@@ -111,46 +111,48 @@ The main application is contained in the com.example.demo package under src/main
 
 ![diagram](graphics/jenkins-in-devops-example.png "Jenkins pipeline") 
 
-The order and steps of the build are defined in the  _Jenkinsfile_  at the top level of the project. This file represents a pipeline for Continuous Build and Deployment. The Jenkins server will interpret the steps in this file and manage the build accordingly. Refer to this file when reading the explanation below.
+The order and steps of the build are defined in the  _Jenkinsfile_  at the top level of the project. This file represents a declarative Pipeline for Continuous Build and Deployment. The Pipeline synta is similar to Groovy with some exceptions. The Jenkins server will interpret the steps in this file and manage the build accordingly. Refer to this file when reading the explanation below. Use the example pipeline as a template for building your own.
+
+The Jenkins Pipeline consists of a high level element  _pipeline{}_  which encloses the other elements. Within this there are other blocks such as  _stage{}_  which can contains  _steps{}_  elements.
 
 The Jenkins server within the OCP machine has been installed with the Gitea plug-in. By using this plug-in the pipeline can be ingested and web-hooks created so that when the git code is pushed from the IDE to the server a build will be triggered automatically. See below for extra set-up information with the Gitea plug-in
 
-The steps in the pipeline are as follows:
+The steps in the example pipeline are as follows:
 
-* [check out]  - the first step is not visible as Jenkins will pull the code from git when the build is triggered whether manually or via a webhook
-
-
-* environment  -  set up variables used in the pipeline
+* [check out]   - the first step is not visible as Jenkins will pull the code from git when the build is triggered whether manually or via a webhook
 
 
-* First Stage  -  a dummy stage that just echoes some info about the build and environment variables
+* environment{}   -  set up variables used in the pipeline
 
 
-*  Test  -  runs automated tests via Maven command (currently no tests defined so this will pass) [ _uses Maven_ ]
+* stage{"First Stage"}   -  a dummy stage that just echoes some info about the build and environment variables
 
 
-*  Sonar  - runs a Maven target that invokes the Sonarqube scanner plug-in to analyse the code [ _uses Sonar scanner plug-in and invokes Sonarqube container_ ]
+*  stage{"Test"}  -  runs automated tests via Maven command (currently no tests defined so this will pass) [ _uses Maven_ ]
 
 
-* Build App  - runs a Maven command to build the fat jar representing the Java application [ _uses Maven_ ]
+*  stage{"Sonar"}   - runs a Maven target that invokes the Sonarqube scanner plug-in to analyse the code [ _uses Sonar scanner plug-in and invokes Sonarqube container_ ]
 
 
-* Create Builder  - this step checks to see if a source to image (s2i) Build Configuration (bc) already exists in the OpenShift project. If not it will create one. [ _uses OpenShift plug-in_ ]
+* stage{"Build App"}   - runs a Maven command to build the fat jar representing the Java application [ _uses Maven_ ]
 
 
-* Build Image  - this step will use the Build Configuration and add the fat jar created earlier to create a new image for deployment. [ _uses OpenShift plug-in_ ]
+* stage{"Create Builder"}   - this step checks to see if a source to image (s2i) Build Configuration (bc) already exists in the OpenShift project. If not it will create one. [ _uses OpenShift plug-in_ ]
 
 
-* Create deployment config - this step checks to see if a Deployment Configuration (dc) already exists in the OpenShift project. If not it will create one. [ _uses OpenShift plug-in_ ]
+* stage{"Build Image"}   - this step will use the Build Configuration and add the fat jar created earlier to create a new image for deployment. [ _uses OpenShift plug-in_ ]
 
 
-* Tag image - this step tags the latest built image with a tag representing the Maven version combined with the Jenkins build number [ _uses OpenShift plug-in_ ]
+* stage{"Create deployment config"}  - this step checks to see if a Deployment Configuration (dc) already exists in the OpenShift project. If not it will create one. [ _uses OpenShift plug-in_ ]
 
 
-* Rollout  - based on the deployment configuration this step rolls out the latest build as a deployed pod in the OpenShift cluster. Previous running pod will be stopped and replaced. [ _uses OpenShift plug-in_ ]
+* stage{"Tag image"}  - this step tags the latest built image with a tag representing the Maven version combined with the Jenkins build number [ _uses OpenShift plug-in_ ]
 
 
-* Last stage - dummy stage
+* stage{"Rollout"}   - based on the deployment configuration this step rolls out the latest build as a deployed pod in the OpenShift cluster. Previous running pod will be stopped and replaced. [ _uses OpenShift plug-in_ ]
+
+
+* stage{"Last stage"}  - dummy stage
 
 
 #### Feedback from the plug-ins
@@ -247,7 +249,7 @@ This assumes the Sonarqube server has already been installed in the OpenShift cl
 
 ### Reference Documentation for included packages
 
-The project was originally created using a Spring Boot Maven starter with Kafka support. The auto-generated documentation for this is below:
+The project was originally created using a Spring Boot Maven starter with Kafka support. The auto-generated documentation for this is below - these links will not work in the disconnected environment!
 
 For further reference, please consider the following sections:
 
