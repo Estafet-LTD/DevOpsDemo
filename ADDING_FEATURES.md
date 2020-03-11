@@ -83,5 +83,5 @@ oc project openshift
 oc create -f /home/engineer/ocp/pods/mongodb-ephemeral-template.json
 ```
 
-The template shpuld now appear in the OpenShift service catalog and permit th esimple creation of mongo db application pods
+The template should now appear in the OpenShift service catalog and permit the simple creation of mongo db application pods
 
