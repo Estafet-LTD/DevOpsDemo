@@ -46,9 +46,9 @@ You must find and modify a suitable template file online or else create your own
 
 In this case we have chosen mongodb-ephemeral-template.json and placed it in  _/home/engineer/ocp/pods/_
 
-If you wish persistent there will be a need to create pv - see example in jenkins-deployment calling jenkins-pv.yaml
+If you wish to create persistent application containers there will be a need to create a persistent volume (pv) - see the example in  _/home/engineer/ocp/pods/jenkins-deployment.sh_  which creates storage folders and permissions in  _/srv/nfs_ and calls  _jenkins-pv.yaml_ to create the persistent volume
 
-* amend template as required to reflect th eimage stream tag you have created and the version. E.g. 
+* amend the template as required to reflect the image stream tag you have created and the version. E.g. 
 
 
 ```
@@ -82,4 +82,6 @@ oc project openshift
 ```
 oc create -f /home/engineer/ocp/pods/mongodb-ephemeral-template.json
 ```
+
+The template shpuld now appear in the OpenShift service catalog and permit th esimple creation of mongo db application pods
 
