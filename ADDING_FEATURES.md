@@ -4,7 +4,7 @@ See the files in /home/engineer/ocp/pods for examples of how the existing contai
 
 The basic steps follow to add an image to the internal OpenShift docker registry and to create a Service Catalog item for use in projects. 
 
-The files used to create the mngodb example can b efound in the folder  _mongo-db-example_ 
+The files used to create the mongodb example can be found in the folder  _mongo-db-example_ 
 
 The example will add a mongodb image with an ephemeral Service Catalog Item:
 

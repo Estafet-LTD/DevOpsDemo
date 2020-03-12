@@ -166,6 +166,11 @@ The steps in the example pipeline are as follows:
 
 ![diagram](graphics/sonar-jenkins-notify.png "Sonar notify")
 
+
+### Extracting the built images from the internal registry
+
+[See EXTRACTING_IMAGES.md for instructions on how to extract the built artefacts](EXTRACTING_IMAGES.md)
+
 ---------------------------------------------
 ### Extra configuration of the Jenkins server in the OCP virtual machine
 
