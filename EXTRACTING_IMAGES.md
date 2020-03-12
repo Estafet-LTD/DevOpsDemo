@@ -52,7 +52,7 @@ docker login -u developer -p $TOKEN docker-registry.default.svc.cluster.local:50
 # extract the required image
 
 # save to a tar file that can be exported via the file system 
-docker save docker-registry.default.svc.cluster.local:5000/<project>/<image repo name>:<tag> -o example-build-jenk-10.tar
+docker save docker-registry.default.svc.cluster.local:5000/<project>/<image repo name>:<tag> -o <filename>.tar
 e.g.
 docker save docker-registry.default.svc.cluster.local:5000/devops-example/example-build-jenk:0.0.1-SNAPSHOT-10 -o example-build-jenk-10.tar
 
@@ -60,7 +60,7 @@ docker save docker-registry.default.svc.cluster.local:5000/devops-example/exampl
 # logout of the internal registry
 docker logout -u developer -p $TOKEN docker-registry.default.svc.cluster.local:5000
 
-# then load it to a registry where you need it
+# then copy the file and load it to a registry where you need it
 docker load --input example-build-jenk-10.tar
 
 
@@ -79,7 +79,7 @@ oc new-app <registry address>/<repository>/<image name>:<image tag>
 
 oc new-app docker-registry.default.svc.cluster.local:5000/devops-example/example-build-jenk:0.0.1-SNAPSHOT-10
 
-# as we are ceating docker images we can even test them with docker
+# as we are creating docker images we can even test them with docker
 
 docker run <registry address>/<repository>/<image name>:<image tag> 
 
