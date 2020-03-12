@@ -73,7 +73,7 @@ and
             "displayName": "Version of MongoDB Image",
             "name": "MONGODB_VERSION",
             "required": true,
-            "value": "latest"
+            "value": "3.4"
         }
 ```
 
