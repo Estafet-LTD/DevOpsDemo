@@ -128,7 +128,7 @@ The steps in the example pipeline are as follows:
 * stage{"First Stage"}   -  a dummy stage that just echoes some info about the build and environment variables
 
 
-*  stage{"Test"}  -  runs automated tests via Maven command (currently no tests defined so this will pass) [ _uses Maven_ ]
+*  stage{"Test"}  -  runs automated tests via Maven test command [ _uses Maven_ ]
 
 
 *  stage{"Sonar"}   - runs a Maven target that invokes the Sonarqube scanner plug-in to analyse the code [ _uses Sonar scanner plug-in and invokes Sonarqube container_ ]
