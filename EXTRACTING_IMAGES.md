@@ -47,18 +47,18 @@ oc login -u developer -p developer
 TOKEN=$(oc whoami -t)
 
 #login to the internal registry
-docker login -u developer -p $TOKEN docker-registry.default.svc.cluster.local:5000
+docker login -u developer -p $TOKEN docker-registry-default.apps.ocp.thales.com
 
 # extract the required image
 
 # save to a tar file that can be exported via the file system 
-docker save docker-registry.default.svc.cluster.local:5000/<project>/<image repo name>:<tag> -o <filename>.tar
+docker save docker-registry-default.apps.ocp.thales.com/<project>/<image repo name>:<tag> -o <filename>.tar
 e.g.
-docker save docker-registry.default.svc.cluster.local:5000/devops-example/example-build-jenk:0.0.1-SNAPSHOT-10 -o example-build-jenk-10.tar
+docker save docker-registry-default.apps.ocp.thales.com/devops-example/example-build-jenk:0.0.1-SNAPSHOT-10 -o example-build-jenk-10.tar
 
 
 # logout of the internal registry
-docker logout -u developer -p $TOKEN docker-registry.default.svc.cluster.local:5000
+docker logout -u developer -p $TOKEN docker-registry-default.apps.ocp.thales.com
 
 # then copy the file and load it to a registry where you need it
 docker load --input example-build-jenk-10.tar
@@ -77,7 +77,7 @@ oc new-app <registry address>/<repository>/<image name>:<image tag>
 
 # e.g.
 
-oc new-app docker-registry.default.svc.cluster.local:5000/devops-example/example-build-jenk:0.0.1-SNAPSHOT-10
+oc new-app docker-registry-default.apps.ocp.thales.com/devops-example/example-build-jenk:0.0.1-SNAPSHOT-10
 
 # as we are creating docker images we can even test them with docker
 
