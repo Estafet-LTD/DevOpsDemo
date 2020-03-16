@@ -66,9 +66,12 @@ docker load --input example-build-jenk-10.tar
 
 ```
 
-## using an image to create an application in a project
+## Importing an image to create an application in a project
 
-Once the image has been exported and tagged as required the OpenShift CLI command new-app can be used to turn an image into a running pod
+[See ADDING_FEATURES.md for a worked example of how to import built artefacts](ADDING_FEATURES.md). The same principle can be used to bring an image into a container in an OpenShift project.
+
+The OpenShift CLI command new-app can be used to turn an image into a running pod.
+
 
 ```
 oc new-project test-example  # create and switch to the new project
