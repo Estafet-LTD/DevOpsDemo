@@ -252,6 +252,38 @@ This assumes the Sonarqube server has already been installed in the OpenShift cl
 
 -------------------------------------
 
+### Adding the project to Gitea
+
+Steps for adding the example project to Gitea in the disconnected environment follow:
+
+* In the Infrastructure VM
+
+Download the project as a zip file into the repo.thales.com VM
+
+
+
+* In the OCP VM:
+
+Create a repository in Gitea named <example repo name>
+
+```
+wget repo.thales.com/<zipped git project>.zip
+unzip <zipped git project>.zip -d <git home folder>
+cd /<git home folder>/<unzipped folder>
+
+git init  # initialise this as a repository in git
+git add *  #  add all elements to git
+
+git remote add origin http://ocp.thales.com:3000/engineer/<example repo name>  # connect the gitea repo
+
+git commit
+
+git push -u origin master
+
+```
+
+
+----------------------------------------
 ### Reference Documentation for included packages
 
 The project was originally created using a Spring Boot Maven starter with Kafka support. The auto-generated documentation for this is below - these links will not work in the disconnected environment!
