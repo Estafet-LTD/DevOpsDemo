@@ -40,6 +40,8 @@ Post install several containers were added as follows to enable the example proj
 
 [See ADDING_FEATURES.md for instructions on how to add further containers to OCP](ADDING_FEATURES.md) 
 
+By default the OCP installation uses default certificates for its security and the routes created for the installed pods are also unsecured (the default position). If further security with TLS is required see [SECURING_FEATURES.md](SECURING_FEATURES.md) for further information.
+
 --------------------------------
 
 ## Jenkins Pipelines
