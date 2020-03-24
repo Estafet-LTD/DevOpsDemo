@@ -101,19 +101,19 @@ The various elements of the application are explained below:
 
 The main application is contained in the com.example.demo package under src/main/java
 
-* ExampleApplication.java - this class defines the application sing the  _@SpringBootApplication_  annotation and defines the ProducerFactory and KafkaTemplate that will be used to send messages to the Kafka cluster
+* ExampleApplication.java - this class defines the application using the  _@SpringBootApplication_  annotation and defines the ProducerFactory and KafkaTemplate that will be used to send messages to the Kafka cluster
 
 
 * Greeting.java - this class is a simple Data class that is used to define the greetings objects that will be sent to Kafka
 
 
-* GreetingKafkaController - this class acts as a controller for the RESTful service using the  _@RestController_  annotation. This will take HTTP requests and turn them into greetings to be sent to Kafka. This class contains two RESTful mappings a GET and a POST mapping. The GET mapping is a dummy as the Kafka stream will be operating in real time and its listeners will receive messages as they are POSTed. The POST mapping will take an HTTP parameter and generate the greeting before sending it to Kafka using the Template defined in the main Application class.
+* GreetingKafkaController - this class acts as a controller for the RESTful service using the  _@RestController_  annotation. This will take HTTP requests and turn them into greetings to be sent to Kafka. This class contains two RESTful mappings - a GET and a POST mapping. The GET mapping is a dummy as the Kafka stream will be operating in real time and its listeners will receive messages as they are POSTed. The POST mapping will take an HTTP parameter and generate the greeting before sending it to Kafka using the Template defined in the main Application class.
 
 ### The Jenkins build pipeline
 
 ![diagram](graphics/jenkins-in-devops-example.png "Jenkins pipeline") 
 
-The order and steps of the build are defined in the  _Jenkinsfile_  at the top level of the project. This file represents a declarative Pipeline for Continuous Build and Deployment. The Pipeline synta is similar to Groovy with some exceptions. The Jenkins server will interpret the steps in this file and manage the build accordingly. Refer to this file when reading the explanation below. Use the example pipeline as a template for building your own.
+The order and steps of the build are defined in the  _Jenkinsfile_  at the top level of the project. This file represents a declarative Pipeline for Continuous Build and Deployment. The Pipeline syntax is similar to Groovy with some exceptions. The Jenkins server will interpret the steps in this file and manage the build accordingly. Refer to this file when reading the explanation below. Use the example pipeline as a template for building your own.
 
 The Jenkins Pipeline consists of a high level element  _pipeline{}_  which encloses the other elements. Within this there are other blocks such as  _stage{}_  which can contains  _steps{}_  elements.
 
@@ -167,6 +167,24 @@ The steps in the example pipeline are as follows:
 * The sonarqube analysis that is triggered by the Jenkins build can be linked via the sonarqube icon in the build history:
 
 ![diagram](graphics/sonar-jenkins-notify.png "Sonar notify")
+
+### Testing the build
+
+To test the running spring boot application:
+
+* Use  _curl_  to invoke the RESTful service from a terminal:
+
+```
+curl -i -X POST http://example-deploy-jenkins-devops-example.apps.ocp.thales.com/greetings?name=Kevin # post
+
+curl http://example-deploy-jenkins-devops-example.apps.ocp.thales.com/greetings # dummy get
+```
+
+* Open a terminal in the running Kafka cluster (the pod named  _my-cluster-kafka-0_ )  and enter the following to display the Kafka stream:
+
+```
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic greeting-topic --from-beginning
+```
 
 
 ### Extracting the built images from the internal registry
@@ -266,7 +284,7 @@ Download the project as a zip file into the repo.thales.com VM
 
 * In the OCP VM:
 
-Create a repository in Gitea named <example repo name>
+Create a repository in Gitea named  _<example repo name>_
 
 ```
 wget repo.thales.com/<zipped git project>.zip
