@@ -24,6 +24,7 @@ pipeline {
         sh "${mvnHome}/bin/mvn -B test"
       }
       }
+      
       stage('SonarQube analysis') {
      steps{
     withSonarQubeEnv('Sonar') {
@@ -31,6 +32,7 @@ pipeline {
                   }
     }
   }
+  
   stage('Build App') {
      steps {
       sh "${mvnHome}/bin/mvn -DskipTests clean install"
@@ -42,7 +44,7 @@ pipeline {
         expression {
           openshift.withCluster() {
           openshift.withProject('devops-example') {
-            return !openshift.selector("bc", "example-build-jenk").exists();
+            return !openshift.selector("bc", "example-build-jenkins").exists();
           }
         }
         }
@@ -51,7 +53,7 @@ pipeline {
         script {
           openshift.withCluster() {
           openshift.withProject('devops-example') {
-           openshift.newBuild("--name=example-build-jenk", "--docker-image=docker-registry.default.svc.cluster.local:5000/devops-example/openjdk18-openshift", "--binary", "--to-docker=true", "--to=docker-registry.default.svc.cluster.local:5000/devops-example/example-build-jenk")
+           openshift.newBuild("--name=example-build-jenkins", "--image-stream=openshift/openjdk18-openshift", "--binary", "--to-docker=true", "--to=docker-registry.default.svc.cluster.local:5000/devops-example/example-build-jenkins")
          }
           }
         }
@@ -63,7 +65,7 @@ pipeline {
      script {
         openshift.withCluster() {
         openshift.withProject('devops-example') {
-           openshift.selector("bc", "example-build-jenk").startBuild("--from-file=target/example-${VERSION}.jar", "--wait")
+           openshift.selector("bc", "example-build-jenkins").startBuild("--from-file=target/example-${VERSION}.jar", "--wait")
         }
          }
        }
@@ -75,7 +77,7 @@ stage('Create deployment config') {
         expression {
           openshift.withCluster() {
           openshift.withProject('devops-example') {
-            return !openshift.selector('dc', 'example-deploy-jenk').exists();
+            return !openshift.selector('dc', 'example-deploy-jenkins').exists();
           }
         }
         }
@@ -84,7 +86,7 @@ stage('Create deployment config') {
         script {
           openshift.withCluster() {   
                   openshift.withProject('devops-example') {
-            openshift.newApp("--docker-image=docker-registry.default.svc.cluster.local:5000/devops-example/example-build-jenk:latest", "--name=example-deploy-jenk").narrow('svc').expose()
+            openshift.newApp("--image-stream=devops-example/example-build-jenkins:latest", "--name=example-deploy-jenkins").narrow('svc').expose()
           }
           }
         }
@@ -96,24 +98,13 @@ stage('Create deployment config') {
       script {
         openshift.withCluster() {
             openshift.withProject('devops-example') {
-          openshift.tag("example-build-jenk:latest", "example-build-jenk:${VERSION}-${BUILD_NUMBER}")
+          openshift.tag("example-build-jenkins:latest", "example-build-jenkins:${VERSION}-${BUILD_NUMBER}")
         }
       }
       }
     }
    }
-    
-    stage('Rollout') {
-      steps {
-        script {
-          openshift.withCluster() {
-          openshift.withProject('devops-example') {
-            openshift.selector("dc", "example-deploy-jenk").rollout().latest()
-          }
-          }
-        }
-      }
-    }
+   
     stage('Last stage') {
        steps { echo 'Byeee, world!'}
       }

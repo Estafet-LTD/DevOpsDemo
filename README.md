@@ -151,9 +151,6 @@ The steps in the example pipeline are as follows:
 * stage{"Tag image"}  - this step tags the latest built image with a tag representing the Maven version combined with the Jenkins build number [ _uses OpenShift plug-in_ ]
 
 
-* stage{"Rollout"}   - based on the deployment configuration this step rolls out the latest build as a deployed pod in the OpenShift cluster. Previous running pod will be stopped and replaced. [ _uses OpenShift plug-in_ ]
-
-
 * stage{"Last stage"}  - dummy stage
 
 
